@@ -14,6 +14,9 @@ document.addEventListener('click', function(e){
     else if(e.target.id === 'tweet-btn'){
         handleTweetBtnClick()
     }
+    else if(e.target.dataset.userReplyClick){
+        handleUserReplyClick(e.target.dataset.userReplyClick)
+    }
 })
  
 function handleLikeClick(tweetId){ 
@@ -71,6 +74,30 @@ function handleTweetBtnClick(){
 
 }
 
+function handleUserReplyClick(userReplyId){
+    const userReply = document.getElementById(`user-input-${userReplyId}`)
+    const targetTweetObj = tweetsData.filter(function(tweet){
+        return tweet.uuid === userReplyId
+    })[0]
+    console.log(targetTweetObj.uuid)
+
+    if(userReply.value){
+        targetTweetObj.replies.push({
+            handle: `@Scrimba`,
+            profilePic: `images/scrimbalogo.png`,
+            likes: 0,
+            retweets: 0,
+            tweetText: userReply.value,
+            replies: [],
+            isLiked: false,
+            isRetweeted: false,
+            uuid: uuidv4()
+        })
+    render()
+    userReply.value = ''
+    }
+}
+
 function getFeedHtml(){
     let feedHtml = ``
     
@@ -108,9 +135,9 @@ function getFeedHtml(){
         
         repliesHtml += `<div class="tweet-input-area tweet-reply">
 				            <img src="images/scrimbalogo.png" class="profile-pic">
-				            <textarea class="tweet-text user-reply" placeholder="Post your reply" id="reply-input"></textarea>
+				            <textarea class="tweet-text user-reply" placeholder="Post your reply" id="user-input-${tweet.uuid}"></textarea>
 			            </div>
-                        <button class="reply-btn tweet-text" id="reply-btn">Reply</button>`
+                        <button class="reply-btn tweet-text" data-user-reply-click="${tweet.uuid}">Reply</button>`
           
         feedHtml += `
                     <div class="tweet">
@@ -155,4 +182,3 @@ function render(){
 }
 
 render()
-
