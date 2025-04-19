@@ -79,7 +79,6 @@ function handleUserReplyClick(userReplyId){
     const targetTweetObj = tweetsData.filter(function(tweet){
         return tweet.uuid === userReplyId
     })[0]
-    console.log(targetTweetObj.uuid)
 
     if(userReply.value){
         targetTweetObj.replies.push({
@@ -93,9 +92,10 @@ function handleUserReplyClick(userReplyId){
             isRetweeted: false,
             uuid: uuidv4()
         })
-    render()
-    userReply.value = ''
+        render()
+        userReply.value = ''
     }
+    document.getElementById(`replies-${userReplyId}`).classList.toggle('hidden')
 }
 
 function getFeedHtml(){
